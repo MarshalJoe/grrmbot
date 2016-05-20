@@ -7,7 +7,7 @@ const Bot = new Twit(config);
 var schedule = require('node-schedule');
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = 14;
+rule.minute = 33;
 
 var j = schedule.scheduleJob(rule, composePost);
 
@@ -21,7 +21,7 @@ function tweet (content) {
 };
 
 function composeTweet(content) {
-	return content + " #grrmbot"; 
+	return " " + content + " #grrmbot"; 
 }
 
 function openText () {
