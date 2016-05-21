@@ -4,12 +4,9 @@ const config = require('./config.js');
 const Twit = require('twit');
 const fs = require('fs');
 const Bot = new Twit(config);
-var schedule = require('node-schedule');
-
-var rule = new schedule.RecurrenceRule();
-rule.minute = 43;
-
-var j = schedule.scheduleJob(rule, composePost);
+var cron = require('node-cron');
+ 
+cron.schedule('*/15 * * * *', composePost);
 
 function tweet (content) {
 	Bot.post('statuses/update', { status: content }, function(err, reply){
@@ -21,7 +18,7 @@ function tweet (content) {
 };
 
 function composeTweet(content) {
-	return content + " #grrmbot"; 
+	return content; 
 }
 
 function openText () {
@@ -48,13 +45,12 @@ function pullContent() {
 function composePost() {
 	let phrase = pullContent()
 	let clean_phrase = phrase.replace('\n', '').trim();
-	if (clean_phrase.length < 130) {
+	if (clean_phrase.length < 140) {
 		tweet(composeTweet(clean_phrase));
 	} else {
 		composePost()
 	}
 }
-
 
 
 
