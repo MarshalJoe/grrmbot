@@ -7,9 +7,10 @@ const Bot = new Twit(config);
 var cron = require('node-cron');
  
 cron.schedule('*/15 * * * *', composePost);
+cron.schedule('*/5 * * * *', searchAndLike);
 
 function tweet (content) {
-	Bot.post('statuses/update', { status: content }, function(err, reply){
+	Bot.post('statuses/update', { status: content }, function (err, reply) {
 		if (err) {
 			console.log(err);
 			return;	
@@ -18,7 +19,7 @@ function tweet (content) {
 };
 
 function composeTweet(content) {
-	return content; 
+	return content + " #GoT"; 
 }
 
 function openText () {
@@ -45,14 +46,30 @@ function pullContent() {
 function composePost() {
 	let phrase = pullContent()
 	let clean_phrase = phrase.replace('\n', '').trim();
-	if (clean_phrase.length < 140) {
+	if (clean_phrase.length < 135) {
 		tweet(composeTweet(clean_phrase));
 	} else {
 		composePost()
 	}
 }
 
-
+function searchAndLike() {
+	Bot.get('search/tweets', { q: "Game of Thrones" }, function (err, reply) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+	}).then(function(response) {
+		let commentId = response.data['statuses'][0]['id_str'];
+		Bot.post('favorites/create', { id: commentId }, function (err, reply) {
+			if (err) {
+				console.log(err);
+				return;
+			}
+			console.log('Liked a tweet from ' + reply['user']['screen_name']);
+		});
+	});
+}
 
 
 
