@@ -7,7 +7,7 @@ const Bot = new Twit(config);
 var cron = require('node-cron');
  
 cron.schedule('*/15 * * * *', composePost);
-cron.schedule('*/5 * * * *', searchAndLike);
+cron.schedule('*/9 * * * *', searchAndLike);
 
 function tweet (content) {
 	Bot.post('statuses/update', { status: content }, function (err, reply) {
