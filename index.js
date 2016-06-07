@@ -6,7 +6,7 @@ const fs = require('fs');
 const Bot = new Twit(config);
 var cron = require('node-cron');
  
-cron.schedule('*/15 * * * *', composePost);
+cron.schedule('*/30 * * * *', composePost);
 //cron.schedule('*/9 * * * *', searchAndLike);
 
 function tweet (content) {
